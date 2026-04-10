@@ -1,0 +1,39 @@
+version: '1.0'
+services:
+
+  #API EXPRESS JS
+  api:
+    build: .
+    ports:
+      - 3003:3000
+    environment:
+      - DB_HOST=localhost
+      - DB_USER=root
+      - DB_PASS=123456789
+      - DB_NAME=my_app
+      - DB_PORT=3309
+      - REDIS_URL=redis://localhost:6379
+      - MODE=Development
+      - JWT_SECRET_KEY=code_segredo
+      - JWT_EXPIRES_IN=1h
+    depends_on:
+      - db
+      - cache
+    volumes:
+      - .:/app
+
+  #DB MySQL
+  db:
+    image: mysql:8.0
+    ports:
+      - 3309:3306
+    environment:
+      MYSQL_ROOT_PASSWORD: 123456789
+      MYSQL_DATABASE: my_app
+
+  #Redis
+  cache:
+    image: redis:alpine
+
+volumes:
+  db_data:
